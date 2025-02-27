@@ -5,13 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, useColorScheme, Image } from 'react-native';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useThemeContext } from './context/ThemeContext';
-import HomeScreen from './screens/HomeScreen';
-import LoginScreen from './screens/LoginScreen';
+
 import SignIn from './screens/SignIn';
 import HomePage from './screens/HomePage';
 import UserDetails from './screens/UserDetails';
 import OrdersScreen from './screens/OrderScreen';
-import AnotherScreen from './screens/BellScreen'; // Replace with your actual screen
+import AnotherScreen from './screens/BellScreen'; 
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

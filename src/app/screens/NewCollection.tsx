@@ -16,7 +16,7 @@ const NewCollection: React.FC = () => {
   const fetchProducts = async () => {
     try {
       const response:any = await axios.get("https://dummyjson.com/products");
-      setProducts(response.data.products); // ✅ Extract `products` array
+      setProducts(response.data.products); 
     } catch (error) {
       console.error("Error fetching products:", error);
     }
