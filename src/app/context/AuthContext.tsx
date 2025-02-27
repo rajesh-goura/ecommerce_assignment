@@ -1,18 +1,14 @@
-import React, { createContext, useState, useContext, ReactNode, FC } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-type AuthContextType = {
+interface AuthContextType {
   token: string | null;
   login: (token: string) => void;
   logout: () => void;
-};
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-type AuthProviderProps = {
-  children: ReactNode;
-};
-
-const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
 
   const login = (token: string) => {
@@ -30,12 +26,10 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   );
 };
 
-const useAuth = () => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
-
-export { AuthProvider, useAuth };
