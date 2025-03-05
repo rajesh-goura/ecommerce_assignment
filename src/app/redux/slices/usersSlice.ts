@@ -46,9 +46,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    clearUserDetails: (state) => {
-      state.userDetails = null;
-    },
+    clearUserDetails: () => initialState,
   },
   extraReducers: (builder) => {
     builder

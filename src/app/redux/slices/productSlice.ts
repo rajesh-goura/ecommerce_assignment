@@ -36,7 +36,9 @@ export const fetchProducts = createAsyncThunk<ProductItem[], void, { rejectValue
 const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -52,5 +54,7 @@ const productSlice = createSlice({
       });
   },
 });
-
+export const { reset } = productSlice.actions;
 export default productSlice.reducer;
+
+
