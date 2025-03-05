@@ -1,11 +1,11 @@
 import { Middleware } from '@reduxjs/toolkit';
-import { logout } from '../slices/authSlice';
-import { AnyAction } from 'redux';
+import { logout, reset as authReset } from '../slices/authSlice';
+import { reset as productReset } from '../slices/productSlice';
 
 const resetMiddleware: Middleware = (store) => (next) => (action: any) => {
   if (action.type === logout.fulfilled.type) {
-    store.dispatch({ type: 'user/reset' });
-    store.dispatch({ type: 'products/reset' });
+    store.dispatch(authReset());
+    store.dispatch(productReset());
   }
   return next(action);
 };
