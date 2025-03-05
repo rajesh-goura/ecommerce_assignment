@@ -1,29 +1,17 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { login } from '../redux/slices/authSlice';
 import { useNavigation } from '@react-navigation/native';
 
 const SignIn = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
-  
+  const dispatch = useAppDispatch();
+  const { token, status, error } = useAppSelector((state) => state.auth);
 
- 
   const handleSignIn = async () => {
-    try {
-      const response:any= await axios.post('https://dummyjson.com/auth/login', {
-        username: username,
-        password: password,
-      });
-     
-      const token = response.data.accessToken;
-      login(token);
-      
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+    dispatch(login({ username, password }));
   };
 
   return (
@@ -43,7 +31,7 @@ const SignIn = () => {
           style={styles.emailInput}
           value={password}
           onChangeText={setPassword}
-          // secureTextEntry
+          secureTextEntry
           autoCapitalize="none"
         />
         <TouchableOpacity style={styles.signInBtn} onPress={handleSignIn}>
@@ -54,6 +42,8 @@ const SignIn = () => {
           <Text style={styles.createAccBold}>Create One</Text>
         </Text>
       </View>
+
+      
 
       <View style={styles.signInOptions}>
         <TouchableOpacity style={styles.signInBtns}>

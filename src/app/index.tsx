@@ -2,8 +2,10 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, useColorScheme, Image } from 'react-native';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { StyleSheet, Image } from 'react-native';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+import { useAppSelector } from './redux/hooks';
 import { ThemeProvider, useThemeContext } from './context/ThemeContext';
 
 import SignIn from './screens/SignIn';
@@ -44,15 +46,13 @@ const MainTabs = () => {
         tabBarShowLabel: false,
         tabBarActiveTintColor:'#8E6CEF',
         tabBarInactiveTintColor: 'gray',
-        tabBarStyle:{
-          height:70,
-          paddingTop:15,
+        tabBarStyle: {
+          height: 70,
+          paddingTop: 15,
         }
-        
       })}
-      
     >
-      <Tab.Screen name="Home" component={HomePage} options={{headerShown:false}}/>
+      <Tab.Screen name="Home" component={HomePage} options={{ headerShown: false }} />
       <Tab.Screen name="Profile" component={UserDetails} />
       <Tab.Screen name="Orders" component={OrdersScreen} />
       <Tab.Screen name="Another" component={AnotherScreen} />
@@ -61,8 +61,7 @@ const MainTabs = () => {
 };
 
 const MainNavigation = () => {
-  const { token } = useAuth();
-  const deviceTheme = useColorScheme();
+  const token = useAppSelector((state) => state.auth.token);
   const { theme } = useThemeContext();
 
   return (
@@ -78,6 +77,16 @@ const MainNavigation = () => {
   );
 };
 
+const App = () => {
+  return (
+    <Provider store={store}>
+      <ThemeProvider>
+        <MainNavigation />
+      </ThemeProvider>
+    </Provider>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -86,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainNavigation;
+export default App;

@@ -1,20 +1,17 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import MainNavigation from './app/index'
-import { AuthProvider } from './app/context/AuthContext'
-import { ThemeProvider } from './app/context/ThemeContext'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './app/redux/store';
+import MainNavigation from './app/index';
+import { ThemeProvider } from './app/context/ThemeContext';
 
 const App = () => {
   return (
-   
-   <AuthProvider>
-       <ThemeProvider>
-         <MainNavigation />
-       </ThemeProvider>
-     </AuthProvider>
-    
-  )
-}
+    <Provider store={store}>
+      <ThemeProvider>
+        <MainNavigation />
+      </ThemeProvider>
+    </Provider>
+  );
+};
 
-export default App
+export default App;

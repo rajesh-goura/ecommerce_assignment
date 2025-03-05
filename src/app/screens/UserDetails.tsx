@@ -1,46 +1,40 @@
+
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-
-interface UserDetails {
-  image: string;
-  name: string;
-  username: string;
-  email: string;
-  phone: string;
-  address: Address;
-}
-interface Address{
-    address:string;
-}
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { fetchUserDetails, clearUserDetails } from '../redux/slices/usersSlice';
+import { logout } from '../redux/slices/authSlice';
 
 const UserDetails = () => {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
-  const {logout} = useAuth();
-  
+  const dispatch = useAppDispatch();
+  const { userDetails, status, error } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response:any= await axios.get('https://dummyjson.com/auth/me');
-        setUserDetails(response.data);
-      } catch (error) {
-        console.error('Failed to fetch user details:', error);
-      }
+    dispatch(fetchUserDetails());
+
+    return () => {
+      dispatch(clearUserDetails());
     };
+  }, [dispatch]);
 
-    fetchUserDetails();
-  }, []);
-
-  if (!userDetails) {
+  if (status === 'loading') {
     return (
       <View style={styles.loadingContainer}>
         <Text style={styles.loadingText}>Loading...</Text>
       </View>
     );
+  }
+
+  if (status === 'failed') {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Error: {error}</Text>
+      </View>
+    );
+  }
+
+  if (!userDetails) {
+    return null;
   }
 
   return (
@@ -51,7 +45,7 @@ const UserDetails = () => {
       <Text style={styles.email}>{userDetails.email}</Text>
       <Text style={styles.phone}>{userDetails.phone}</Text>
       <Text style={styles.address}>{userDetails.address.address}</Text>
-      <Button title='Logout' onPress={logout}></Button>
+      <Button title='Logout' onPress={() => dispatch(logout())}></Button>
     </View>
   );
 };
@@ -62,7 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    padding:50 ,
+    padding: 50,
     alignItems: 'center',
   },
   profileImage: {

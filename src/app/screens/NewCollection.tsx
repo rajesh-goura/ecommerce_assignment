@@ -1,32 +1,19 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../redux/slices/productSlice";
+import { RootState, AppDispatch } from "../redux/store";
 import Product from "./Product";
-import axios from "axios";
-
-interface ProductItem {
-  id: number;
-  title: string;
-  price: number;
-  thumbnail: string;
-}
 
 const NewCollection: React.FC = () => {
-  const [products, setProducts] = useState<ProductItem[]>([]);
-
-  const fetchProducts = async () => {
-    try {
-      const response:any = await axios.get("https://dummyjson.com/products");
-      setProducts(response.data.products); 
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, status, error } = useSelector((state: RootState) => state.products);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-  const handleHeartPress = (item: ProductItem) => {
+  const handleHeartPress = (item: any) => {
     console.log(`Favorite clicked for: ${item.title}`);
   };
 
@@ -36,6 +23,8 @@ const NewCollection: React.FC = () => {
         <Text style={styles.newCollectionHdBoldTxt}>Top Selling</Text>
         <Text style={styles.newCollectionHdtxt}>See All</Text>
       </View>
+      {status === "loading" && <Text>Loading...</Text>}
+      {status === "failed" && <Text>Error: {error}</Text>}
       <View style={styles.newCollectionList}>
         <FlatList
           data={products}
