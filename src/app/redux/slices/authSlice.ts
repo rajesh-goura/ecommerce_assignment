@@ -17,12 +17,12 @@ const initialState: AuthState = {
 export const login = createAsyncThunk('auth/login', async (credentials: { username: string; password: string }) => {
   const response:any= await axios.post('https://dummyjson.com/auth/login', credentials);
   const token = response.data.accessToken;
-  await SecureStore.setItemAsync('authToken', token);
+  
   return token;
 });
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await SecureStore.deleteItemAsync('authToken');
+  
   return null;
 });
 
