@@ -1,4 +1,3 @@
-
 import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -8,6 +7,7 @@ import { logout } from '../redux/slices/authSlice';
 const UserDetails = () => {
   const dispatch = useAppDispatch();
   const { userDetails, status, error } = useAppSelector((state) => state.user);
+  const theme = useAppSelector((state) => state.theme.theme);
 
   useEffect(() => {
     dispatch(fetchUserDetails());
@@ -20,7 +20,7 @@ const UserDetails = () => {
   if (status === 'loading') {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading...</Text>
+        <Text style={[styles.loadingText, theme === 'dark' ? styles.darkText : styles.lightText]}>Loading...</Text>
       </View>
     );
   }
@@ -28,7 +28,7 @@ const UserDetails = () => {
   if (status === 'failed') {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Error: {error}</Text>
+        <Text style={[styles.loadingText, theme === 'dark' ? styles.darkText : styles.lightText]}>Error: {error}</Text>
       </View>
     );
   }
@@ -38,13 +38,13 @@ const UserDetails = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, theme === 'dark' ? styles.darkContainer : styles.lightContainer]}>
       <Image source={{ uri: userDetails.image }} style={styles.profileImage} />
-      <Text style={styles.name}>{userDetails.name}</Text>
-      <Text style={styles.username}>@{userDetails.username}</Text>
-      <Text style={styles.email}>{userDetails.email}</Text>
-      <Text style={styles.phone}>{userDetails.phone}</Text>
-      <Text style={styles.address}>{userDetails.address.address}</Text>
+      <Text style={[styles.name, theme === 'dark' ? styles.darkText : styles.lightText]}>{userDetails.name}</Text>
+      <Text style={[styles.username, theme === 'dark' ? styles.darkText : styles.lightText]}>@{userDetails.username}</Text>
+      <Text style={[styles.email, theme === 'dark' ? styles.darkText : styles.lightText]}>{userDetails.email}</Text>
+      <Text style={[styles.phone, theme === 'dark' ? styles.darkText : styles.lightText]}>{userDetails.phone}</Text>
+      <Text style={[styles.address, theme === 'dark' ? styles.darkText : styles.lightText]}>{userDetails.address.address}</Text>
       <Button title='Logout' onPress={() => dispatch(logout())}></Button>
     </View>
   );
@@ -55,9 +55,14 @@ export default UserDetails;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
     padding: 50,
     alignItems: 'center',
+  },
+  lightContainer: {
+    backgroundColor: '#FFFFFF',
+  },
+  darkContainer: {
+    backgroundColor: '#121212',
   },
   profileImage: {
     width: 100,
@@ -68,26 +73,21 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#272727',
   },
   username: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#8E6CEF',
   },
   email: {
     fontSize: 16,
-    color: '#000000',
     marginTop: 8,
   },
   phone: {
     fontSize: 16,
-    color: '#000000',
     marginTop: 8,
   },
   address: {
     fontSize: 16,
-    color: '#000000',
     marginTop: 8,
     textAlign: 'center',
   },
@@ -98,6 +98,11 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#000000',
+  },
+  lightText: {
+    color: '#272727',
+  },
+  darkText: {
+    color: '#FFFFFF',
   },
 });

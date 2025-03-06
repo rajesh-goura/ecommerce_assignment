@@ -2,6 +2,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import axios from "axios";
+import { useAppSelector } from "../redux/hooks";
 
 interface ProductItem {
   id: number;
@@ -12,11 +13,12 @@ interface ProductItem {
 
 const NewCollection: React.FC = () => {
   const [products, setProducts] = useState<ProductItem[]>([]);
+  const theme = useAppSelector((state) => state.theme.theme);
 
   const fetchProducts = async () => {
     try {
-      const response:any = await axios.get("https://dummyjson.com/products");
-      setProducts(response.data.products); 
+      const response: any = await axios.get("https://dummyjson.com/products");
+      setProducts(response.data.products);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -33,8 +35,8 @@ const NewCollection: React.FC = () => {
   return (
     <View>
       <View style={styles.newCollectionHeadingTexts}>
-        <Text style={styles.newCollectionHdBoldTxt}>Top Selling</Text>
-        <Text style={styles.newCollectionHdtxt}>See All</Text>
+        <Text style={[styles.newCollectionHdBoldTxt, theme === 'dark' ? styles.darkText : styles.lightText]}>Top Selling</Text>
+        <Text style={[styles.newCollectionHdtxt, theme === 'dark' ? styles.darkText : styles.lightText]}>See All</Text>
       </View>
       <View style={styles.newCollectionList}>
         <FlatList
@@ -50,7 +52,7 @@ const NewCollection: React.FC = () => {
             />
           )}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+          ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
     </View>
@@ -83,5 +85,14 @@ const styles = StyleSheet.create({
   newCollectionList: {
     flexDirection: "row",
     gap: 12,
+  },
+  itemSeparator: {
+    width: 12,
+  },
+  lightText: {
+    color: "#272727",
+  },
+  darkText: {
+    color: "#FFFFFF",
   },
 });

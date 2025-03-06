@@ -8,6 +8,7 @@ import Product from "./Product";
 const NewCollection: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products, status, error } = useSelector((state: RootState) => state.products);
+  const theme = useSelector((state: RootState) => state.theme.theme);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -20,11 +21,11 @@ const NewCollection: React.FC = () => {
   return (
     <View>
       <View style={styles.newCollectionHeadingTexts}>
-        <Text style={styles.newCollectionHdBoldTxt}>Top Selling</Text>
-        <Text style={styles.newCollectionHdtxt}>See All</Text>
+        <Text style={[styles.newCollectionHdBoldTxt, theme === 'dark' ? styles.darkText : styles.lightText]}>Top Selling</Text>
+        <Text style={[styles.newCollectionHdtxt, theme === 'dark' ? styles.darkText : styles.lightText]}>See All</Text>
       </View>
-      {status === "loading" && <Text>Loading...</Text>}
-      {status === "failed" && <Text>Error: {error}</Text>}
+      {status === "loading" && <Text style={theme === 'dark' ? styles.darkText : styles.lightText}>Loading...</Text>}
+      {status === "failed" && <Text style={theme === 'dark' ? styles.darkText : styles.lightText}>Error: {error}</Text>}
       <View style={styles.newCollectionList}>
         <FlatList
           data={products}
@@ -39,7 +40,7 @@ const NewCollection: React.FC = () => {
             />
           )}
           showsHorizontalScrollIndicator={false}
-          ItemSeparatorComponent={() => <View style={{ width: 12 }} />}
+          ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
         />
       </View>
     </View>
@@ -72,5 +73,14 @@ const styles = StyleSheet.create({
   newCollectionList: {
     flexDirection: "row",
     gap: 12,
+  },
+  itemSeparator: {
+    width: 12,
+  },
+  lightText: {
+    color: "#272727",
+  },
+  darkText: {
+    color: "#FFFFFF",
   },
 });

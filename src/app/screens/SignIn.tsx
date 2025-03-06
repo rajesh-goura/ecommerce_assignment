@@ -1,64 +1,64 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { login } from '../redux/slices/authSlice';
-import { useNavigation } from '@react-navigation/native';
 
 const SignIn = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
   const { token, status, error } = useAppSelector((state) => state.auth);
+  const theme = useAppSelector((state) => state.theme.theme);
 
   const handleSignIn = async () => {
     dispatch(login({ username, password }));
   };
 
   return (
-    <View style={styles.mainContainer}>
-      <Text style={styles.signInText}>Sign in</Text>
+    <View style={[styles.mainContainer, theme === 'dark' ? styles.darkContainer : styles.lightContainer]}>
+      <Text style={[styles.signInText, theme === 'dark' ? styles.darkText : styles.lightText]}>Sign in</Text>
 
       <View style={styles.emailBox}>
         <TextInput
           placeholder='Username'
-          style={styles.emailInput}
+          style={[styles.emailInput, theme === 'dark' ? styles.darkInput : styles.lightInput]}
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
+          placeholderTextColor={theme === 'dark' ? styles.darkPlaceholder.color : styles.lightPlaceholder.color}
         />
         <TextInput
           placeholder='Password'
-          style={styles.emailInput}
+          style={[styles.emailInput, theme === 'dark' ? styles.darkInput : styles.lightInput]}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
           autoCapitalize="none"
+          placeholderTextColor={theme === 'dark' ? styles.darkPlaceholder.color : styles.lightPlaceholder.color}
         />
         <TouchableOpacity style={styles.signInBtn} onPress={handleSignIn}>
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
-        <Text style={styles.createAccText}>
+        <Text style={[styles.createAccText, theme === 'dark' ? styles.darkText : styles.lightText]}>
           Don't have an Account?{' '}
-          <Text style={styles.createAccBold}>Create One</Text>
+          <Text style={[styles.createAccBold, theme === 'dark' ? styles.darkText : styles.lightText]}>Create One</Text>
         </Text>
       </View>
 
-      
-
       <View style={styles.signInOptions}>
-        <TouchableOpacity style={styles.signInBtns}>
+        <TouchableOpacity style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
           <Image source={require('../assets/Apple svg.png')} style={styles.icon} />
-          <Text style={styles.signInbuttonText}>Continue with Apple</Text>
+          <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Apple</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.signInBtns}>
+        <TouchableOpacity style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
           <Image source={require('../assets/Google - png 0.png')} style={styles.icon} />
-          <Text style={styles.signInbuttonText}>Continue with Google</Text>
+          <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Google</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.signInBtns}>
+        <TouchableOpacity style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
           <Image source={require('../assets/Facebook - png 0.png')} style={styles.icon} />
-          <Text style={styles.signInbuttonText}>Continue with Facebook</Text>
+          <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Facebook</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -70,10 +70,15 @@ export default SignIn;
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 24,
     paddingVertical: 64,
     justifyContent: "center",
+  },
+  lightContainer: {
+    backgroundColor: "#FFFFFF",
+  },
+  darkContainer: {
+    backgroundColor: "#272727",
   },
   signInText: {
     fontWeight: "700",
@@ -82,7 +87,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.41,
     marginBottom: 40,
     textAlign: "left",
+  },
+  lightText: {
     color: "#272727",
+  },
+  darkText: {
+    color: "#FFFFFF",
   },
   emailBox: {
     gap: 16,
@@ -90,12 +100,24 @@ const styles = StyleSheet.create({
   },
   emailInput: {
     borderRadius: 8,
-    backgroundColor: "#F4F4F4",
     padding: 14,
     fontSize: 16,
-    color: "black",
     width: "100%",
     alignSelf: "stretch",
+  },
+  lightInput: {
+    backgroundColor: "#F4F4F4",
+    color: "black",
+  },
+  darkInput: {
+    backgroundColor: "#3C3C3C",
+    color: "white",
+  },
+  darkPlaceholder: {
+    color: '#BBBBBB',
+  },
+  lightPlaceholder: {
+    color: '#777777',
   },
   signInBtn: {
     backgroundColor: "#8E6CEF",
@@ -110,7 +132,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   createAccText: {
-    color: "black",
     fontWeight: "400",
     fontSize: 14,
     textAlign: "center",
@@ -118,7 +139,6 @@ const styles = StyleSheet.create({
   },
   createAccBold: {
     fontWeight: "700",
-    color: "#000000",
   },
   signInOptions: {
     marginTop: 24,
@@ -128,7 +148,6 @@ const styles = StyleSheet.create({
   signInBtns: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#F4F4F4",
     paddingVertical: 16,
     paddingHorizontal: 20,
     borderRadius: 100,
@@ -136,15 +155,26 @@ const styles = StyleSheet.create({
     width: "100%",
     alignSelf: "stretch",
   },
+  lightSignInBtns: {
+    backgroundColor: "#E0E0E0",
+  },
+  darkSignInBtns: {
+    backgroundColor: "#342F3F",
+  },
   icon: {
     width: 20,
     height: 24,
   },
   signInbuttonText: {
-    color: "black",
     textAlign: "center",
     fontSize: 16,
     fontWeight: "500",
     flex: 1,
+  },
+  lightSignInbuttonText: {
+    color: "black",
+  },
+  darkSignInbuttonText: {
+    color: "white",
   },
 });

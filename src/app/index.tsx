@@ -1,18 +1,18 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, Image } from 'react-native';
 import { Provider } from 'react-redux';
-import store from './redux/store';
-import { useAppSelector } from './redux/hooks';
-import { ThemeProvider, useThemeContext } from './context/ThemeContext';
+import { useSelector } from 'react-redux';
+import store, { RootState } from './redux/store';
 
 import SignIn from './screens/SignIn';
 import HomePage from './screens/HomePage';
 import UserDetails from './screens/UserDetails';
 import OrdersScreen from './screens/OrderScreen';
 import AnotherScreen from './screens/BellScreen'; 
+import ThemePage from './screens/ThemePage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,7 +44,7 @@ const MainTabs = () => {
           return <Image source={iconSource} style={{ width: size+15, height: size+15, tintColor: color }} />;
         },
         tabBarShowLabel: false,
-        tabBarActiveTintColor:'#8E6CEF',
+        tabBarActiveTintColor: '#8E6CEF',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
           height: 70,
@@ -55,17 +55,19 @@ const MainTabs = () => {
       <Tab.Screen name="Home" component={HomePage} options={{ headerShown: false }} />
       <Tab.Screen name="Profile" component={UserDetails} />
       <Tab.Screen name="Orders" component={OrdersScreen} />
-      <Tab.Screen name="Another" component={AnotherScreen} />
+      <Tab.Screen name="Another" component={ThemePage} />
     </Tab.Navigator>
   );
 };
 
 const MainNavigation = () => {
-  const token = useAppSelector((state) => state.auth.token);
-  const { theme } = useThemeContext();
+  const token = useSelector((state: RootState) => state.auth.token);
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  
+  const navigationTheme = theme === 'dark' ? DarkTheme : DefaultTheme;
 
   return (
-    <NavigationContainer theme={theme}>
+    <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {token ? (
           <Stack.Screen name="MainTabs" component={MainTabs} />
@@ -77,4 +79,12 @@ const MainNavigation = () => {
   );
 };
 
-export default MainNavigation;
+const App = () => {
+  return (
+    <Provider store={store}>
+      <MainNavigation />
+    </Provider>
+  );
+};
+
+export default App;
