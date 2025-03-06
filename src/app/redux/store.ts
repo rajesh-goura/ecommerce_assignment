@@ -35,15 +35,18 @@
 
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-import AsyncStorage from "@react-native-async-storage/async-storage"
+import createSecureStore from "redux-persist-expo-securestore"
 import authReducer from './slices/authSlice';
 import userReducer from './slices/usersSlice';
 import productReducer from './slices/productSlice';
 import resetMiddleware from './slices/resetMiddleware';
 
+
+const secureStorage = createSecureStore();
+
 const authPersistConfig = {
   key: 'auth',
-  storage:AsyncStorage,
+  storage:secureStorage,
   whitelist: ['token'] 
 };
 
