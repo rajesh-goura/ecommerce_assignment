@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useColorScheme } from 'react-native';
+import { Appearance } from 'react-native';
 
 interface ThemeState {
   theme: 'light' | 'dark';
 }
 
 const initialState: ThemeState = {
-  theme: 'light',
+  theme: Appearance.getColorScheme() ?? 'light', 
 };
 
 const themeSlice = createSlice({
@@ -19,8 +19,11 @@ const themeSlice = createSlice({
     setDeviceTheme: (state, action: PayloadAction<'light' | 'dark'>) => {
       state.theme = action.payload;
     },
+    updateThemeToSystem: (state) => {
+      state.theme = Appearance.getColorScheme() ?? 'light'; // Update theme to system theme
+    },
   },
 });
 
-export const { toggleTheme, setDeviceTheme } = themeSlice.actions;
+export const { toggleTheme, setDeviceTheme, updateThemeToSystem } = themeSlice.actions;
 export default themeSlice.reducer;

@@ -8,7 +8,6 @@ import productReducer from './slices/productSlice';
 import themeReducer from './slices/themeSlice';
 import resetMiddleware from './slices/resetMiddleware';
 
-
 const secureStorage = createSecureStore();
 
 const authPersistConfig = {
@@ -20,7 +19,7 @@ const authPersistConfig = {
 const themePersistConfig = {
   key: 'theme',
   storage: AsyncStorage,
-  whitelist: ['theme'], 
+  whitelist: ['theme'],
 };
 
 const rootReducer = combineReducers({

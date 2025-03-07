@@ -3,6 +3,7 @@ import { View, Button, StyleSheet, useColorScheme } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { toggleTheme, setDeviceTheme } from '../redux/slices/themeSlice';
+import { logout } from '../redux/slices/authSlice';
 
 const ThemePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +20,7 @@ const ThemePage = () => {
     <View style={[styles.container, theme === 'dark' ? styles.dark : styles.light]}>
       <Button title="Toggle Theme" onPress={() => dispatch(toggleTheme())} />
       <Button title="Set Device Theme" onPress={handleSetDeviceTheme} />
+      <Button title='Logout' onPress={() => dispatch(logout())}></Button>
     </View>
   );
 };
