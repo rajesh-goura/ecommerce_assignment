@@ -5,7 +5,8 @@ import { fetchUserDetails, clearUserDetails } from '../redux/slices/usersSlice';
 import { logout } from '../redux/slices/authSlice';
 
 const UserDetails = () => {
-  const dispatch = useAppDispatch();
+  
+  
   const { userDetails, status, error } = useAppSelector((state) => state.user);
   const theme = useAppSelector((state) => state.theme.theme);
 

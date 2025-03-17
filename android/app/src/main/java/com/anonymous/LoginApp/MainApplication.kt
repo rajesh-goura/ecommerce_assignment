@@ -1,4 +1,4 @@
-package com.loginapp
+package com.anonymous.LoginApp
 
 import android.app.Application
 import android.content.res.Configuration

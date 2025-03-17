@@ -20,7 +20,7 @@ const themeSlice = createSlice({
       state.theme = action.payload;
     },
     updateThemeToSystem: (state) => {
-      state.theme = Appearance.getColorScheme() ?? 'light'; // Update theme to system theme
+      state.theme = Appearance.getColorScheme() ?? 'light'; 
     },
   },
 });

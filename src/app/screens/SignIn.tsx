@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { login } from '../redux/slices/authSlice';
+import { login , googleLogin} from '../redux/slices/authSlice';
+import { facebookLogin } from '../redux/slices/authSlice';
+
 
 const SignIn = () => {
   const [username, setUsername] = useState('');
@@ -13,6 +15,15 @@ const SignIn = () => {
   const handleSignIn = async () => {
     dispatch(login({ username, password }));
   };
+
+  const handleGoogleSignIn = async () => {
+    dispatch(googleLogin());
+  };
+
+  const handleFacebookSignIn = async () => {
+    dispatch(facebookLogin());
+  };
+  
 
   return (
     <View style={[styles.mainContainer, theme === 'dark' ? styles.darkContainer : styles.lightContainer]}>
@@ -51,12 +62,12 @@ const SignIn = () => {
           <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Apple</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
+        <TouchableOpacity onPress={handleGoogleSignIn} style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
           <Image source={require('../assets/Google - png 0.png')} style={styles.icon} />
           <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Google</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
+        <TouchableOpacity onPress={handleFacebookSignIn} style={[styles.signInBtns, theme === 'dark' ? styles.darkSignInBtns : styles.lightSignInBtns]}>
           <Image source={require('../assets/Facebook - png 0.png')} style={styles.icon} />
           <Text style={[styles.signInbuttonText, theme === 'dark' ? styles.darkSignInbuttonText : styles.lightSignInbuttonText]}>Continue with Facebook</Text>
         </TouchableOpacity>
